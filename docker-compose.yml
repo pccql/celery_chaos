@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  worker:
+    build:
+      context: ./app
+    container_name: worker
+    command: poetry run celery -A celery_app worker --loglevel=info -Q hello_queue
+    volumes:
+      - ./app:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_BACKEND_URL=redis://redis:6379/1
+    depends_on:
+      - redis
+
+  beat:
+    build:
+      context: ./app
+    container_name: beat
+    command: poetry run celery -A celery_app beat --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_BACKEND_URL=redis://redis:6379/1
+    volumes:
+      - ./app:/app
+    depends_on:
+      - redis

@@ -1,0 +1,10 @@
+FROM python:3.12-slim-bookworm
+
+RUN pip install --no-cache-dir poetry
+
+WORKDIR /app
+
+COPY pyproject.toml .
+RUN poetry install --no-root
+
+COPY . .
