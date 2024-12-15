@@ -30,3 +30,17 @@ services:
       - ./app:/app
     depends_on:
       - redis
+
+  chaos:
+    build:
+      context: ./chaos
+    container_name: chaos
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./chaos:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
