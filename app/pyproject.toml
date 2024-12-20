@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12.5"
 celery = "^5.4.0"
 redis = "^5.2.1"
+celery-prometheus-exporter = "^1.7.0"
 
 
 [build-system]

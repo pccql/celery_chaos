@@ -10,6 +10,9 @@ celery_app = Celery(
 
 celery_app.conf.imports = ["tasks"]
 
+celery_app.worker_send_task_events = True
+celery_app.task_send_sent_event = True
+
 celery_app.conf.task_routes = {
     "tasks.hello_world.hello_world": {"queue": "hello_queue"},
 }
