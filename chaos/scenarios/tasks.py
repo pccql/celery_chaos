@@ -12,6 +12,7 @@ docker_client = docker.from_env()
 # Memory exhaustion (resource pressure).
 # Redis broker delays (communication bottlenecks).
 # Worker termination (unexpected crashes).
+# CPU Saturation
 
 
 @tasks_router.post("/redis_add_delay")
@@ -55,9 +56,20 @@ def memory_exhaustion():
     return {"status": "Memory exhaustion triggered in worker"}
 
 
-@tasks_router.post("/chaos/worker_termination")
+@tasks_router.post("/worker_termination")
 def worker_termination():
     worker_container = docker_client.containers.get("worker")
     worker_container.kill()
 
     return {"status": "Worker terminated"}
+
+
+@tasks_router.post("/cpu_exhaustion")
+def cpu_exhaustion():
+    worker_container = docker_client.containers.get("worker")
+
+    command = 'python -c "[x**x for x in range(1000000)]"'
+
+    worker_container.exec_run(command, detach=True)
+
+    return {"status": "CPU exhaustion triggered in worker"}
