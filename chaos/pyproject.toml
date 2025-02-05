@@ -1,17 +1,11 @@
-[tool.poetry]
+[project]
 name = "chaos"
 version = "0.1.0"
-description = ""
-authors = ["Pedro Queiroz <pccql@cin.ufpe.br>"]
+description = "Add your description here"
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.12.5"
-fastapi = "^0.115.6"
-uvicorn = "^0.34.0"
-redis = "^5.2.1"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.8",
+    "redis>=5.2.1",
+    "uvicorn>=0.34.0",
+]

@@ -1,3 +1,5 @@
 __pycache__/
 celerybeat-schedule
+celerybeat-schedule.db
 .python-version
+.venv/

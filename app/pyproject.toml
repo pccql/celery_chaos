@@ -1,17 +1,11 @@
-[tool.poetry]
-name = "celery-chaos"
+[project]
+name = "app"
 version = "0.1.0"
-description = ""
-authors = ["Pedro Queiroz <pccql@cin.ufpe.br>"]
+description = "Add your description here"
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.12.5"
-celery = "^5.4.0"
-redis = "^5.2.1"
-celery-prometheus-exporter = "^1.7.0"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.12.5"
+dependencies = [
+    "celery>=5.4.0",
+    "celery-prometheus-exporter>=1.7.0",
+    "redis>=5.2.1",
+]

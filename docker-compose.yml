@@ -9,7 +9,7 @@ services:
     build:
       context: ./app
     container_name: worker
-    command: poetry run celery -A celery_app worker --loglevel=info -Q hello_queue --events
+    command: uv run celery -A celery_app worker --loglevel=info -Q hello_queue --events
     volumes:
       - ./app:/app
     ports:
@@ -24,7 +24,7 @@ services:
     build:
       context: ./app
     container_name: beat
-    command: poetry run celery -A celery_app beat --loglevel=info
+    command: uv run celery -A celery_app beat --loglevel=info
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_BACKEND_URL=redis://redis:6379/1
