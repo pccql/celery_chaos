@@ -53,3 +53,11 @@ def memory_exhaustion():
     worker_container.exec_run(command, detach=True)
 
     return {"status": "Memory exhaustion triggered in worker"}
+
+
+@tasks_router.post("/chaos/worker_termination")
+def worker_termination():
+    worker_container = docker_client.containers.get("worker")
+    worker_container.kill()
+
+    return {"status": "Worker terminated"}
