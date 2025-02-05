@@ -39,3 +39,17 @@ def redis_delay_clear():
         raise Exception(f"Failed to clear delay: {output.decode()}")
 
     return {"status": "Redis delay cleared"}
+
+
+@tasks_router.post("/memory_exhaustion")
+def memory_exhaustion():
+    worker_container = docker_client.containers.get("worker")
+
+    command = (
+        'python -c "import time; memory_hog = []; '
+        "[(memory_hog.append(' ' * 10**6), time.sleep(0.1)) for _ in range(1000000)]\""
+    )
+
+    worker_container.exec_run(command, detach=True)
+
+    return {"status": "Memory exhaustion triggered in worker"}
