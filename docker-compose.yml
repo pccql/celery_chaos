@@ -37,6 +37,19 @@ services:
     depends_on:
       - redis
 
+  flower:
+    build:
+      context: ./app
+    container_name: flower
+    command: uv run celery -A celery_app flower
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_BACKEND_URL=redis://redis:6379/1
+    depends_on:
+      - redis
+
   chaos:
     build:
       context: ./chaos
@@ -51,34 +64,25 @@ services:
       - REDIS_PORT=6379
     depends_on:
       - redis
-#   prometheus:
-#     image: prom/prometheus:latest
-#     container_name: prometheus
-#     volumes:
-#       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-#     ports:
-#       - "9090:9090"
 
-#   grafana:
-#     image: grafana/grafana:latest
-#     container_name: grafana
-#     ports:
-#       - "3000:3000"
-#     environment:
-#       - GF_SECURITY_ADMIN_USER=admin
-#       - GF_SECURITY_ADMIN_PASSWORD=admin
-#     volumes:
-#       - grafana_data:/var/lib/grafana
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
 
-#   celery-exporter:
-#     image: ovalmoney/celery-exporter
-#     container_name: celery-exporter
-#     ports:
-#       - "9540:9540"
-#     environment:
-#       - BROKER_URL=redis://redis:6379/0
-#     depends_on:
-#       - redis
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
 
-# volumes:
-#   grafana_data:
+volumes:
+  grafana_data:
