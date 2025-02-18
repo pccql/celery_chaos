@@ -12,7 +12,7 @@ services:
     build:
       context: ./app
     container_name: worker
-    command: uv run celery -A celery_app worker --loglevel=info -Q hello_queue --events
+    command: uv run celery -A celery_app worker --loglevel=info --events
     volumes:
       - ./app:/app
     ports:
