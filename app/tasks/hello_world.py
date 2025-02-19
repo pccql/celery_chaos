@@ -1,10 +1,11 @@
 from celery_app import celery_app
 
-from tasks.memory_intensive_task import memory_intensive_task
+from tasks.request_task import request_task
 
 
 @celery_app.task()
 def hello_world():
-    memory_intensive_task.delay()
+    for _ in range(20):
+        request_task.delay()
 
     return "Hello World"
