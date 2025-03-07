@@ -23,6 +23,7 @@ services:
     depends_on:
       - redis
     mem_limit: 1000m
+    # restart: on-failure
 
   beat:
     build:

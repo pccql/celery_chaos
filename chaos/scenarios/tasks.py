@@ -48,11 +48,7 @@ def redis_delay_clear():
 def memory_exhaustion():
     worker_container = docker_client.containers.get(CONTAINER)
 
-    command = (
-        'python -c "import time; memory_hog = []; '
-        "[(memory_hog.append(' ' * 10**6), time.sleep(0.1)) for _ in range(1000000)]\""
-    )
-
+    command = "stress --vm 2"
     worker_container.exec_run(command, detach=True)
 
     return {"status": "Memory exhaustion triggered in worker"}
@@ -62,8 +58,7 @@ def memory_exhaustion():
 def cpu_exhaustion():
     worker_container = docker_client.containers.get(CONTAINER)
 
-    command = 'python -c "[x**x for x in range(1000000)]"'
-
+    command = "stress --cpu 6"
     worker_container.exec_run(command, detach=True)
 
     return {"status": "CPU exhaustion triggered in worker"}
