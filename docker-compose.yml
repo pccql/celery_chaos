@@ -11,18 +11,18 @@ services:
   worker:
     build:
       context: ./app
-    container_name: worker
+    # container_name: worker
     command: uv run celery -A celery_app worker --loglevel=info --events
     volumes:
       - ./app:/app
-    ports:
-      - "8080:8080"
+    # ports:
+    #   - "8080:8080"
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_BACKEND_URL=redis://redis:6379/1
     depends_on:
       - redis
-    mem_limit: 500m
+    mem_limit: 1000m
 
   beat:
     build:

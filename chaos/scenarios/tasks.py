@@ -14,6 +14,8 @@ docker_client = docker.from_env()
 # Worker termination (unexpected crashes).
 # CPU Saturation
 
+CONTAINER = "celery_chaos-worker-1"
+
 
 @tasks_router.post("/redis_add_delay")
 def redis_add_delay(delay_ms: int = 1000):
@@ -44,7 +46,7 @@ def redis_delay_clear():
 
 @tasks_router.post("/memory_exhaustion")
 def memory_exhaustion():
-    worker_container = docker_client.containers.get("worker")
+    worker_container = docker_client.containers.get(CONTAINER)
 
     command = (
         'python -c "import time; memory_hog = []; '
@@ -56,20 +58,20 @@ def memory_exhaustion():
     return {"status": "Memory exhaustion triggered in worker"}
 
 
-@tasks_router.post("/worker_termination")
-def worker_termination():
-    worker_container = docker_client.containers.get("worker")
-    worker_container.kill()
-
-    return {"status": "Worker terminated"}
-
-
 @tasks_router.post("/cpu_exhaustion")
 def cpu_exhaustion():
-    worker_container = docker_client.containers.get("worker")
+    worker_container = docker_client.containers.get(CONTAINER)
 
     command = 'python -c "[x**x for x in range(1000000)]"'
 
     worker_container.exec_run(command, detach=True)
 
     return {"status": "CPU exhaustion triggered in worker"}
+
+
+@tasks_router.post("/worker_termination")
+def worker_termination():
+    worker_container = docker_client.containers.get(CONTAINER)
+    worker_container.kill()
+
+    return {"status": "Worker terminated"}
