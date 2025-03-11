@@ -48,7 +48,7 @@ def redis_delay_clear():
 def memory_exhaustion():
     worker_container = docker_client.containers.get(CONTAINER)
 
-    command = "stress --vm 2"
+    command = "stress --vm 1"
     worker_container.exec_run(command, detach=True)
 
     return {"status": "Memory exhaustion triggered in worker"}
